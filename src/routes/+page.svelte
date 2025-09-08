@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { all_timers, startCountdown } from '$lib/globals.svelte';
+	import { onMount } from 'svelte';
 	import TimerCard from '$lib/TimerCard.svelte';
 
 	var name: string = $state('');
@@ -22,6 +23,30 @@
 		name = '';
 		document.getElementById('timer-name')?.focus();
 	}
+
+	onMount(() => {
+		if (Notification.permission === 'default' || Notification.permission === 'denied') {
+				Notification.requestPermission();
+		}
+		const handleVisibilityChange = () => {
+			if (
+				document.visibilityState === 'hidden' &&
+				Notification.permission === 'granted' &&
+				Object.keys(all_timers).length > 0
+			) {
+				new Notification('TimerZ', {
+					body: 'Your timers are still running in the background as long as TimerZ is open.'
+					// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
+				});
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	});
 </script>
 
 <svelte:head>

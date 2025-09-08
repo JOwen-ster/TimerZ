@@ -1,7 +1,7 @@
 <script lang="ts">
 	let { timer }: TimerCardProps = $props();
-	import { all_timers, startCountdown } from "./globals.svelte";
-	let togglePauseOn = $state(false)
+	import { all_timers, startCountdown } from './globals.svelte';
+	let togglePauseOn = $state(false);
 
 	function removeTimer(name: string) {
 		let found_timer = all_timers[name];
@@ -12,8 +12,8 @@
 
 	function pauseTimer(name: string) {
 		let found_timer = all_timers[name];
-		togglePauseOn = !togglePauseOn
-		if ( togglePauseOn ) {
+		togglePauseOn = !togglePauseOn;
+		if (togglePauseOn) {
 			if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
 		} else {
 			found_timer.intervalId = startCountdown(found_timer);
@@ -39,22 +39,22 @@
 		return parts.join(':');
 	}
 
-    function getProgressPercentage() {
-        return timer.timeLeft <= 0 ? 0 : Math.round( ( timer.timeLeft / timer.maxTime ) * 100);
-    }
+	function getProgressPercentage() {
+		return timer.timeLeft <= 0 ? 0 : Math.round((timer.timeLeft / timer.maxTime) * 100);
+	}
 
-    function getStatusClass() {
-        switch (true) {
-            case timer.timeLeft === 0:
-                return 'finished';
-            case (timer.timeLeft / timer.maxTime) <= 0.10:
-                return 'critical';
-            case (timer.timeLeft / timer.maxTime) <= 0.50:
-                return 'warning';
-            default:
-                return 'active';
-        }
-    }
+	function getStatusClass() {
+		switch (true) {
+			case timer.timeLeft === 0:
+				return 'finished';
+			case timer.timeLeft / timer.maxTime <= 0.1:
+				return 'critical';
+			case timer.timeLeft / timer.maxTime <= 0.5:
+				return 'warning';
+			default:
+				return 'active';
+		}
+	}
 </script>
 
 <div class="timer-card {getStatusClass()}">
