@@ -7,6 +7,7 @@ export function startCountdown(timer: Timer) {
 		} else {
 			clearInterval(timer.intervalId);
 			timer.timeLeft = 0;
+			timer.intervalId = undefined
 			if (
 				Notification.permission === 'granted' &&
 				Object.keys(all_timers).length > 0
