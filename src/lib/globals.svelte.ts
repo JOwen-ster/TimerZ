@@ -11,10 +11,10 @@ export function startCountdown(timer: Timer) {
 				Notification.permission === 'granted' &&
 				Object.keys(all_timers).length > 0
 			) {
-			new Notification('TimerZ', {
-				body: `${timer.name} has ended!`
-				// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
-			});
+				new Notification('TimerZ', {
+					body: `The ${timer.name} timer has ended!`
+					// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
+				});
 			}
 		}
 	}, 1000);
