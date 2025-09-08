@@ -246,9 +246,6 @@
 
 	/* Dark mode support */
 	@media (prefers-color-scheme: dark) {
-		.container {
-			background: #111827;
-		}
 
 		.app-title {
 			color: #f9fafb;
