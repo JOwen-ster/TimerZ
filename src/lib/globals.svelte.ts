@@ -13,9 +13,14 @@ export function startCountdown(timer: Timer) {
 			) {
 				new Notification('TimerZ', {
 					body: `The ${timer.name} timer has ended!`
-					// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
 				});
 			}
 		}
 	}, 1000);
+}
+
+export function verify_url(url: string) {
+	return encodeURIComponent(
+		url.trim().replace(/ /g, "-")
+	);
 }

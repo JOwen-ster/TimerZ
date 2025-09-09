@@ -1,37 +1,32 @@
 <script lang="ts">
-	import { all_timers, startCountdown } from '$lib/globals.svelte';
+	import { all_timers, verify_url } from '$lib/globals.svelte';
 	import { onMount } from 'svelte';
 	import TimerCard from '$lib/TimerCard.svelte';
-	import RedirectButton from '$lib/RedirectButton.svelte';
 	import { goto } from '$app/navigation';
 
 	var name: string = $state('');
 	var minutes: number = $state(15);
 
-	function addTimer(event: SubmitEvent) {
-		event.preventDefault();
-		const formatted_name: string = name.replace(/ /g, "-");
-		const casted_minutes = Number(minutes);
-		name = '';
-		document.getElementById('timer-name')?.focus();
-	
-		if (!Number.isInteger(casted_minutes) || casted_minutes <= 0  || formatted_name === "") {
-			if (
-				Notification.permission === 'granted' &&
-				!(formatted_name in all_timers)
-			) {
+	function handleTimer(event: SubmitEvent) {
+		event.preventDefault()
+		const formatted_name = verify_url(name)
+		goto(`/create/${formatted_name}/${minutes}`);
+		document.getElementById("timer-name")?.focus()
+	}
+
+	async function requestNotif() {
+		await Notification.requestPermission().then((result) => {
+			if (result === "granted") {
 				new Notification('TimerZ', {
-					body: 'Please specify a timer name and whole number minute value greater than 0.'
+					body: 'Notifications enabled!'
 				});
 			}
-		} else {
-			goto(`/create/${formatted_name}/${casted_minutes}`)
-		}
+		});
 	}
 
 	onMount(() => {
-		if (Notification.permission === 'default' || Notification.permission === 'denied') {
-				Notification.requestPermission();
+		if (Notification.permission === 'default') {
+			Notification.requestPermission();
 		}
 		const handleVisibilityChange = () => {
 			if (
@@ -41,7 +36,6 @@
 			) {
 				new Notification('TimerZ', {
 					body: 'Your timers are still running in the background as long as TimerZ is open.'
-					// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
 				});
 			}
 		};
@@ -73,7 +67,7 @@
 
 	<div class=""></div>
 	<div class="timer-form-container">
-		<form class="timer-form" onsubmit={addTimer}>
+		<form class="timer-form" onsubmit={handleTimer}>
 			<div class="form-group">
 				<label for="timer-name">Timer Name</label>
 				<input
@@ -92,17 +86,22 @@
 					id="timer-minutes"
 					required
 					type="number"
+					min="1"
 					bind:value={minutes}
 					placeholder="Enter minutes"
 					class="form-input"
 				/>
 			</div>
 
-			<RedirectButton name={name} minutes={minutes}/>
-
+			<button type="submit" class="start-btn">
+				<span>🚀</span>Create Timer
+			</button>
 		</form>
 	</div>
 
+	<button onclick={requestNotif}>
+		Enable Notifications
+	</button>
 
 	<div class="timers-container">
 		{#if Object.keys(all_timers).length === 0}
@@ -165,7 +164,7 @@
 
 	.timer-form {
 		display: grid;
-		grid-template-columns: 1fr 120px auto;
+		grid-template-columns: 1fr .1fr auto auto;
 		gap: 16px;
 		align-items: end;
 	}
@@ -195,6 +194,33 @@
 		outline: none;
 		border-color: #3b82f6;
 		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+	}
+
+	.start-btn {
+		background: linear-gradient(145deg, #3b82f6, #2563eb);
+		color: white;
+		border: none;
+		padding: 12px 24px;
+		border-radius: 8px;
+		cursor: pointer;
+		font-size: 1rem;
+		font-weight: 600;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		transition: all 0.2s ease;
+		box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+		height: fit-content;
+	}
+
+	.start-btn:hover {
+		background: linear-gradient(145deg, #2563eb, #1d4ed8);
+		transform: translateY(-1px);
+		box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+	}
+
+	.start-btn:active {
+		transform: translateY(0);
 	}
 
 	.timers-container {
