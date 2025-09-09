@@ -8,6 +8,11 @@
 		if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
 
 		delete all_timers[name];
+		if (Notification.permission === 'granted') {
+			new Notification('TimerZ', {
+				body: `Deleted ${timer.name}`
+			});
+		}
 	}
 
 	function pauseTimer(name: string) {
