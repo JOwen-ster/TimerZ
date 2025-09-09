@@ -13,7 +13,6 @@ export function startCountdown(timer: Timer) {
 			) {
 			new Notification('TimerZ', {
 				body: `${timer.name} has ended!`
-				// tag: timerz-background, // makes this notification get edited, a new one wont be created when triggering the event
 			});
 			}
 		}

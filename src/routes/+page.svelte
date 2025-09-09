@@ -2,26 +2,31 @@
 	import { all_timers, startCountdown } from '$lib/globals.svelte';
 	import { onMount } from 'svelte';
 	import TimerCard from '$lib/TimerCard.svelte';
+	import RedirectButton from '$lib/RedirectButton.svelte';
+	import { goto } from '$app/navigation';
 
 	var name: string = $state('');
 	var minutes: number = $state(15);
 
 	function addTimer(event: SubmitEvent) {
 		event.preventDefault();
-		if (name in all_timers || minutes <= 0) return;
-
-		// wrap each timer in $state
-		let newTimer: Timer = $state({
-			name,
-			maxTime: minutes * 60,
-			timeLeft: minutes * 60
-		});
-		newTimer.intervalId = startCountdown(newTimer);
-
-		all_timers[name] = newTimer;
-
+		const formatted_name: string = name.replace(/ /g, "-");
+		const casted_minutes = Number(minutes);
 		name = '';
 		document.getElementById('timer-name')?.focus();
+	
+		if (!Number.isInteger(casted_minutes) || casted_minutes <= 0  || formatted_name === "") {
+			if (
+				Notification.permission === 'granted' &&
+				!(formatted_name in all_timers)
+			) {
+				new Notification('TimerZ', {
+					body: 'Please specify a timer name and whole number minute value greater than 0.'
+				});
+			}
+		} else {
+			goto(`/create/${formatted_name}/${casted_minutes}`)
+		}
 	}
 
 	onMount(() => {
@@ -66,6 +71,7 @@
 		</p>
 	</header>
 
+	<div class=""></div>
 	<div class="timer-form-container">
 		<form class="timer-form" onsubmit={addTimer}>
 			<div class="form-group">
@@ -92,12 +98,11 @@
 				/>
 			</div>
 
-			<button type="submit" class="start-btn">
-				<span class="btn-icon">🚀</span>
-				Start Timer
-			</button>
+			<RedirectButton name={name} minutes={minutes}/>
+
 		</form>
 	</div>
+
 
 	<div class="timers-container">
 		{#if Object.keys(all_timers).length === 0}
@@ -192,37 +197,6 @@
 		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 	}
 
-	.start-btn {
-		background: linear-gradient(145deg, #3b82f6, #2563eb);
-		color: white;
-		border: none;
-		padding: 12px 24px;
-		border-radius: 8px;
-		cursor: pointer;
-		font-size: 1rem;
-		font-weight: 600;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		transition: all 0.2s ease;
-		box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-		height: fit-content;
-	}
-
-	.start-btn:hover {
-		background: linear-gradient(145deg, #2563eb, #1d4ed8);
-		transform: translateY(-1px);
-		box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
-	}
-
-	.start-btn:active {
-		transform: translateY(0);
-	}
-
-	.btn-icon {
-		font-size: 1.1rem;
-	}
-
 	.timers-container {
 		margin-top: 24px;
 	}
@@ -291,10 +265,6 @@
 		.timer-form {
 			grid-template-columns: 1fr;
 			gap: 20px;
-		}
-
-		.start-btn {
-			justify-content: center;
 		}
 	}
 </style>
