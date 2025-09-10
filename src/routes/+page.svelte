@@ -41,6 +41,7 @@
 		};
 
 		document.addEventListener('visibilitychange', handleVisibilityChange);
+		document.getElementById("timer-name")?.focus()
 
 		return () => {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
