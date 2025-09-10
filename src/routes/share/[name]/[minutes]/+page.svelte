@@ -30,3 +30,9 @@
 </script>
 
 <h1>Creating timer "{data.name}" for {data.minutes} minutes...</h1>
+
+<style>
+    h1 {
+        color: #f9fafb;
+    }
+</style>
