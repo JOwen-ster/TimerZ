@@ -35,7 +35,8 @@ export function generate_timer(raw_name: string, minutes: number) {
 		const newTimer: Timer = $state({
 			name: formatted_name,
 			maxTime: casted_minutes * 60,
-			timeLeft: casted_minutes * 60
+			timeLeft: casted_minutes * 60,
+			isPaused: false
 		});
 		newTimer.intervalId = startCountdown(newTimer);
 

@@ -13,6 +13,7 @@ declare global {
 			name: string;
 			maxTime: number;
 			timeLeft: number;
+			isPaused: boolean;
 			intervalId?: number;
 	};
 

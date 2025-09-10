@@ -3,8 +3,6 @@
 	import { all_timers, display_notification, startCountdown } from './globals.svelte';
 
 
-	let togglePauseOn = $state(false);
-
 	function removeTimer(name: string) {
 		let found_timer = all_timers[name];
 		if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
@@ -15,8 +13,10 @@
 
 	function pauseTimer(name: string) {
 		let found_timer = all_timers[name];
-		togglePauseOn = !togglePauseOn;
-		if (togglePauseOn) {
+		let current_toggle = found_timer.isPaused
+		found_timer.isPaused = !current_toggle
+
+		if (found_timer.isPaused) {
 			if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
 		} else {
 			found_timer.intervalId = startCountdown(found_timer);
@@ -75,20 +75,22 @@
 	<div class="timer-actions">
 		{#if timer.timeLeft === 0}
 			<span class="status-text">⏰ Time's up!</span>
+		{:else if timer.isPaused}
+			<span class="status-text">Paused...</span>
 		{:else}
 			<span class="status-text">⏳ Running...</span>
-
-			<button class="pause-btn" onclick={() => pauseTimer(timer.name)}>
-				{#if togglePauseOn}
-					Unpause
-				{:else}
-					Pause
-				{/if}
-			</button>
 		{/if}
 
+		<button class="pause-btn" onclick={() => pauseTimer(timer.name)}>
+			{#if timer.isPaused}
+				Unpause
+			{:else}
+				Pause
+			{/if}
+		</button>
+
 		<button class="remove-btn" onclick={() => removeTimer(timer.name)}>
-			<span class="remove-icon">✕</span>
+			<span class="remove-icon">x</span>
 			Remove
 		</button>
 	</div>

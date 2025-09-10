@@ -11,7 +11,7 @@
 		generate_timer(name, minutes)
 	}
 
-	async function requestNotif() {
+	async function requestNotifs() {
 		await Notification.requestPermission().then(() => {
 			display_notification("Notifications are enabled!")
 		});
@@ -90,7 +90,7 @@
 		</form>
 	</div>
 
-	<button onclick={requestNotif}>
+	<button onclick={requestNotifs}>
 		Enable Notifications
 	</button>
 
