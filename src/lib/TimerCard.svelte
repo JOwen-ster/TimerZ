@@ -1,6 +1,8 @@
 <script lang="ts">
 	let { timer }: TimerCardProps = $props();
-	import { all_timers, startCountdown } from './globals.svelte';
+	import { all_timers, display_notification, startCountdown } from './globals.svelte';
+
+
 	let togglePauseOn = $state(false);
 
 	function removeTimer(name: string) {
@@ -8,11 +10,7 @@
 		if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
 
 		delete all_timers[name];
-		if (Notification.permission === 'granted') {
-			new Notification('TimerZ', {
-				body: `Deleted ${timer.name}`
-			});
-		}
+		display_notification(`${name} was removed.`)
 	}
 
 	function pauseTimer(name: string) {

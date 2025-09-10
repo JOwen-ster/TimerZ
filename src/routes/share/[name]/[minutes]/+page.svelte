@@ -1,27 +1,14 @@
 <script lang="ts">
+	let { data } = $props();
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { all_timers, startCountdown } from '$lib/globals.svelte';
+	import { generate_timer, display_notification } from '$lib/globals.svelte';
 
-	let { data } = $props();
 
 	onMount(() => {
-		// create the timer first
-		let newTimer: Timer = $state({
-			name: data.name,
-			maxTime: data.minutes * 60,
-			timeLeft: data.minutes * 60
-		});
-		newTimer.intervalId = startCountdown(newTimer);
+		generate_timer(data.name, data.minutes)
 
-		all_timers[data.name] = newTimer;
-
-		// fire notification if allowed
-		if ("Notification" in window && Notification.permission === "granted") {
-			new Notification("TimerZ", {
-				body: `Timer "${data.name}" set for ${data.minutes} minutes.`
-			});
-		}
+		display_notification(`Set ${data.name} for ${data.minutes} minutes.`)
 
 		setTimeout(() => {
 			goto("/");

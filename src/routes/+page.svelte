@@ -1,26 +1,19 @@
 <script lang="ts">
-	import { all_timers, verify_url } from '$lib/globals.svelte';
+	import { all_timers, display_notification, generate_timer } from '$lib/globals.svelte';
 	import { onMount } from 'svelte';
 	import TimerCard from '$lib/TimerCard.svelte';
-	import { goto } from '$app/navigation';
 
 	var name: string = $state('');
 	var minutes: number = $state(15);
 
 	function handleTimer(event: SubmitEvent) {
 		event.preventDefault()
-		const formatted_name = verify_url(name)
-		goto(`/share/${formatted_name}/${minutes}`);
-		document.getElementById("timer-name")?.focus()
+		generate_timer(name, minutes)
 	}
 
 	async function requestNotif() {
-		await Notification.requestPermission().then((result) => {
-			if (result === "granted") {
-				new Notification('TimerZ', {
-					body: 'Notifications enabled!'
-				});
-			}
+		await Notification.requestPermission().then(() => {
+			display_notification("Notifications are enabled!")
 		});
 	}
 
@@ -31,12 +24,9 @@
 		const handleVisibilityChange = () => {
 			if (
 				document.visibilityState === 'hidden' &&
-				Notification.permission === 'granted' &&
 				Object.keys(all_timers).length > 0
 			) {
-				new Notification('TimerZ', {
-					body: 'Your timers are still running in the background as long as TimerZ is open.'
-				});
+				display_notification('Your timers will still be running in the background as long as TimerZ is open')
 			}
 		};
 
