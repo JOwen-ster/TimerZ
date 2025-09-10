@@ -10,7 +10,7 @@
 	function handleTimer(event: SubmitEvent) {
 		event.preventDefault()
 		const formatted_name = verify_url(name)
-		goto(`/create/${formatted_name}/${minutes}`);
+		goto(`/share/${formatted_name}/${minutes}`);
 		document.getElementById("timer-name")?.focus()
 	}
 
@@ -129,12 +129,8 @@
 	}
 
 	.app-title {
-		font-size: 2.5rem;
-		font-weight: 700;
-		margin: 0 0 8px 0;
-		color: #111;
+		color: #f9fafb;
 	}
-
 	.app-subtitle {
 		color: #6b7280;
 		font-size: 1rem;
@@ -155,7 +151,8 @@
 	}
 
 	.timer-form-container {
-		background: linear-gradient(145deg, #ffffff, #f8f9fa);
+		background: linear-gradient(145deg, #1f2937, #111827);
+		border-color: rgba(75, 85, 99, 0.8);
 		border-radius: 16px;
 		padding: 24px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -177,7 +174,7 @@
 	.form-group label {
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: #374151;
+		color: #d1d5db;
 		margin-bottom: 6px;
 	}
 
@@ -187,13 +184,15 @@
 		border-radius: 8px;
 		font-size: 1rem;
 		transition: all 0.2s ease;
-		background: white;
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
 	}
 
 	.form-input:focus {
 		outline: none;
-		border-color: #3b82f6;
 		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+		border-color: #60a5fa;
 	}
 
 	.start-btn {
@@ -230,7 +229,7 @@
 	.empty-state {
 		text-align: center;
 		padding: 48px 24px;
-		color: #6b7280;
+		color: #d1d5db;
 	}
 
 	.empty-icon {
@@ -242,37 +241,6 @@
 		font-size: 1.5rem;
 		margin: 0 0 8px 0;
 		color: #374151;
-	}
-
-	/* Dark mode support */
-	@media (prefers-color-scheme: dark) {
-
-		.app-title {
-			color: #f9fafb;
-		}
-
-		.timer-form-container {
-			background: linear-gradient(145deg, #1f2937, #111827);
-			border-color: rgba(75, 85, 99, 0.8);
-		}
-
-		.form-group label {
-			color: #d1d5db;
-		}
-
-		.form-input {
-			background: #374151;
-			border-color: #4b5563;
-			color: #f9fafb;
-		}
-
-		.form-input:focus {
-			border-color: #60a5fa;
-		}
-
-		.empty-state h3 {
-			color: #d1d5db;
-		}
 	}
 
 	/* Responsive design */
