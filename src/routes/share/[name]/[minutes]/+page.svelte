@@ -1,10 +1,9 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { all_timers, startCountdown } from '$lib/globals.svelte';
 
-    let { data }: PageProps = $props();
+    let { data } = $props();
 
     onMount(() => {
         let newTimer: Timer = $state({
@@ -23,6 +22,11 @@
                 });
             }
         }
-        goto("/");
+
+        setTimeout(() => {
+            goto("/");
+        }, 100); // wait for js to load
     });
 </script>
+
+<h1>Loading...</h1>
