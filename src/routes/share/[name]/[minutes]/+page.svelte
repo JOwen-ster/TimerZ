@@ -9,11 +9,11 @@
 	onMount(() => {
 		generate_timer(data.name, data.minutes);
 
-		// try {
+		try {
 			display_notification(`Set ${data.name} for ${data.minutes} minutes.`);
-		// } catch (err) {
-		// 	console.warn("Notification failed", err);
-		// }
+		} catch (err) {
+			console.warn("Notification failed", err);
+		}
 
 		// primary redirect after 1s
 		const id = setTimeout(() => {
