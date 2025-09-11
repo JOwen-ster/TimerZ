@@ -9,6 +9,7 @@
 	function handleTimer(event: SubmitEvent) {
 		event.preventDefault()
 		generate_timer(name, minutes)
+		document.getElementById("timer-name")?.focus()
 	}
 
 	async function requestNotifs() {
