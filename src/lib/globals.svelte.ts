@@ -1,10 +1,20 @@
 export const all_timers: Record<string, Timer> = $state({});
 
 export function display_notification(message: string) {
-	if ("Notification" in window && Notification.permission === "granted") {
-		new Notification("TimerZ", {
-			body: message
-		});
+	if (!("Notification" in window)) {
+		console.warn("Notifications not supported");
+		return;
+	}
+
+	// only try if permission is already granted
+	if (Notification.permission === "granted") {
+		try {
+			new Notification("TimerZ", { body: message });
+		} catch (err) {
+			console.warn("Notification error:", err);
+		}
+	} else {
+		console.log("Notification skipped, permission =", Notification.permission);
 	}
 }
 
