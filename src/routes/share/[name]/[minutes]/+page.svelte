@@ -15,22 +15,7 @@
 			console.warn("Notification failed", err);
 		}
 
-		// primary redirect after 1s
-		const id = setTimeout(() => {
-			goto("/");
-		}, 1000);
-
-		// fallback check: if still on the page after 3s, show alert
-		// const fallback = setTimeout(() => {
-		// 	if (location.pathname.includes("/share/")) {
-		// 		alert("Redirect failed");
-		// 	}
-		// }, 3000);
-
-		return () => {
-			clearTimeout(id);
-			// clearTimeout(fallback);
-		};
+		goto("/");
 	});
 </script>
 
