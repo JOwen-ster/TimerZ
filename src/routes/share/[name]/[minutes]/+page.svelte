@@ -21,15 +21,15 @@
 		}, 1000);
 
 		// fallback check: if still on the page after 3s, show alert
-		const fallback = setTimeout(() => {
-			if (location.pathname.includes("/share/")) {
-				alert("Redirect failed");
-			}
-		}, 3000);
+		// const fallback = setTimeout(() => {
+		// 	if (location.pathname.includes("/share/")) {
+		// 		alert("Redirect failed");
+		// 	}
+		// }, 3000);
 
 		return () => {
 			clearTimeout(id);
-			clearTimeout(fallback);
+			// clearTimeout(fallback);
 		};
 	});
 </script>
