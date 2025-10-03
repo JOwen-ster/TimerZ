@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { all_timers, display_notification, generate_timer } from '$lib/globals.svelte';
+	import { all_timers, display_notification, generate_timer, recalculateAllTimers } from '$lib/globals.svelte';
 	import { onMount } from 'svelte';
 	import TimerCard from '$lib/TimerCard.svelte';
 
@@ -10,6 +10,7 @@
 		event.preventDefault()
 		generate_timer(name, minutes)
 		document.getElementById("timer-name")?.focus()
+		name = ''
 	}
 
 	async function requestNotifs() {
@@ -22,8 +23,12 @@
 		if (Notification.permission === 'default') {
 			Notification.requestPermission();
 		}
+		
 		const handleVisibilityChange = () => {
-			if (
+			if (document.visibilityState === 'visible') {
+				// Tab became visible - recalculate all timers to catch up
+				recalculateAllTimers();
+			} else if (
 				document.visibilityState === 'hidden' &&
 				Object.keys(all_timers).length > 0
 			) {

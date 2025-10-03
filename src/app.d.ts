@@ -10,12 +10,13 @@ declare global {
 	}
 
 	type Timer = {
-			name: string;
-			maxTime: number;
-			timeLeft: number;
-			isPaused: boolean;
-			intervalId?: number;
-	};
+		name: string;
+		maxTime: number;
+		timeLeft: number;
+		isPaused: boolean;
+		intervalId?: number;
+		startTime?: number;
+	}
 
 	interface TimerCardProps {
 		timer: Timer;

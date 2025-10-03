@@ -1,7 +1,7 @@
+
 <script lang="ts">
 	let { timer }: TimerCardProps = $props();
 	import { all_timers, display_notification, startCountdown } from './globals.svelte';
-
 
 	function removeTimer(name: string) {
 		let found_timer = all_timers[name];
@@ -13,12 +13,16 @@
 
 	function pauseTimer(name: string) {
 		let found_timer = all_timers[name];
-		let current_toggle = found_timer.isPaused
-		found_timer.isPaused = !current_toggle
+		found_timer.isPaused = !found_timer.isPaused;
 
 		if (found_timer.isPaused) {
-			if (found_timer?.intervalId) clearInterval(found_timer.intervalId);
+			// Pausing: clear interval and keep current timeLeft
+			if (found_timer?.intervalId) {
+				clearInterval(found_timer.intervalId);
+				found_timer.intervalId = undefined;
+			}
 		} else {
+			// Resuming: restart countdown with current timeLeft
 			found_timer.intervalId = startCountdown(found_timer);
 		}
 	}
